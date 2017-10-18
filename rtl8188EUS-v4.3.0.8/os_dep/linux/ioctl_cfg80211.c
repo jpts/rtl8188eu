@@ -1974,7 +1974,7 @@ void rtw_cfg80211_indicate_scan_done(_adapter *adapter, bool aborted)
 {
 	struct rtw_wdev_priv *pwdev_priv = adapter_wdev_data(adapter);
 	_irqL	irqL;
-	struct cfg80211_scan_info done_sinfo = { 0, 0, aborted };
+	struct cfg80211_scan_info done_sinfo = { .aborted = aborted };
 
 	_enter_critical_bh(&pwdev_priv->scan_req_lock, &irqL);
 	if (pwdev_priv->scan_request != NULL) {
