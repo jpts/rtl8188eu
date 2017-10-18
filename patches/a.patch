@@ -1,0 +1,649 @@
+diff --git a/hal/hal_com_phycfg.c b/hal/hal_com_phycfg.c
+index 8bb2747..16a85bf 100644
+--- a/hal/hal_com_phycfg.c
++++ b/hal/hal_com_phycfg.c
+@@ -2575,7 +2575,7 @@ Hal_ChannelPlanToRegulation(
+ #ifdef CONFIG_LOAD_PHY_PARA_FROM_FILE
+ 
+ extern char *rtw_phy_file_path;
+-char	file_path[PATH_LENGTH_MAX];
++char	rtw_file_path[PATH_LENGTH_MAX];
+ 
+ #define GetLineFromBuffer(buffer)	 strsep(&buffer, "\n")
+ 
+@@ -2597,11 +2597,11 @@ phy_ConfigMACWithParaFile(
+ 
+ 	if ((pHalData->mac_reg_len == 0) && (pHalData->mac_reg == NULL))
+ 	{
+-		rtw_merge_string(file_path, PATH_LENGTH_MAX, rtw_phy_file_path, pFileName);
++		rtw_merge_string(rtw_file_path, PATH_LENGTH_MAX, rtw_phy_file_path, pFileName);
+ 	
+-		if (rtw_is_file_readable(file_path) == _TRUE)
++		if (rtw_is_file_readable(rtw_file_path) == _TRUE)
+ 		{
+-			rlen = rtw_retrive_from_file(file_path, pHalData->para_file_buf, MAX_PARA_FILE_BUF_LEN);
++			rlen = rtw_retrive_from_file(rtw_file_path, pHalData->para_file_buf, MAX_PARA_FILE_BUF_LEN);
+ 			if (rlen > 0)
+ 			{
+ 				rtStatus = _SUCCESS;
+@@ -2696,11 +2696,11 @@ phy_ConfigBBWithParaFile(
+ 
+ 	if ((pBufLen != NULL) && (*pBufLen == 0) && (pBuf == NULL))
+ 	{
+-		rtw_merge_string(file_path, PATH_LENGTH_MAX, rtw_phy_file_path, pFileName);
++		rtw_merge_string(rtw_file_path, PATH_LENGTH_MAX, rtw_phy_file_path, pFileName);
+ 	
+-		if (rtw_is_file_readable(file_path) == _TRUE)
++		if (rtw_is_file_readable(rtw_file_path) == _TRUE)
+ 		{
+-			rlen = rtw_retrive_from_file(file_path, pHalData->para_file_buf, MAX_PARA_FILE_BUF_LEN);
++			rlen = rtw_retrive_from_file(rtw_file_path, pHalData->para_file_buf, MAX_PARA_FILE_BUF_LEN);
+ 			if (rlen > 0)
+ 			{
+ 				rtStatus = _SUCCESS;
+@@ -3149,11 +3149,11 @@ phy_ConfigBBWithPgParaFile(
+ 
+ 	if ((pHalData->bb_phy_reg_pg_len == 0) && (pHalData->bb_phy_reg_pg == NULL))
+ 	{
+-		rtw_merge_string(file_path, PATH_LENGTH_MAX, rtw_phy_file_path, pFileName);
++		rtw_merge_string(rtw_file_path, PATH_LENGTH_MAX, rtw_phy_file_path, pFileName);
+ 	
+-		if (rtw_is_file_readable(file_path) == _TRUE)
++		if (rtw_is_file_readable(rtw_file_path) == _TRUE)
+ 		{
+-			rlen = rtw_retrive_from_file(file_path, pHalData->para_file_buf, MAX_PARA_FILE_BUF_LEN);
++			rlen = rtw_retrive_from_file(rtw_file_path, pHalData->para_file_buf, MAX_PARA_FILE_BUF_LEN);
+ 			if (rlen > 0)
+ 			{
+ 				rtStatus = _SUCCESS;
+@@ -3212,11 +3212,11 @@ phy_ConfigBBWithMpParaFile(
+ 
+ 	if ((pHalData->bb_phy_reg_mp_len == 0) && (pHalData->bb_phy_reg_mp == NULL))
+ 	{
+-		rtw_merge_string(file_path, PATH_LENGTH_MAX, rtw_phy_file_path, pFileName);
++		rtw_merge_string(rtw_file_path, PATH_LENGTH_MAX, rtw_phy_file_path, pFileName);
+ 	
+-		if (rtw_is_file_readable(file_path) == _TRUE)
++		if (rtw_is_file_readable(rtw_file_path) == _TRUE)
+ 		{
+-			rlen = rtw_retrive_from_file(file_path, pHalData->para_file_buf, MAX_PARA_FILE_BUF_LEN);
++			rlen = rtw_retrive_from_file(rtw_file_path, pHalData->para_file_buf, MAX_PARA_FILE_BUF_LEN);
+ 			if (rlen > 0)
+ 			{
+ 				rtStatus = _SUCCESS;
+@@ -3348,11 +3348,11 @@ PHY_ConfigRFWithParaFile(
+ 
+ 	if ((pBufLen != NULL) && (*pBufLen == 0) && (pBuf == NULL))
+ 	{
+-		rtw_merge_string(file_path, PATH_LENGTH_MAX, rtw_phy_file_path, pFileName);
++		rtw_merge_string(rtw_file_path, PATH_LENGTH_MAX, rtw_phy_file_path, pFileName);
+ 
+-		if (rtw_is_file_readable(file_path) == _TRUE)
++		if (rtw_is_file_readable(rtw_file_path) == _TRUE)
+ 		{
+-			rlen = rtw_retrive_from_file(file_path, pHalData->para_file_buf, MAX_PARA_FILE_BUF_LEN);
++			rlen = rtw_retrive_from_file(rtw_file_path, pHalData->para_file_buf, MAX_PARA_FILE_BUF_LEN);
+ 			if (rlen > 0)
+ 			{
+ 				rtStatus = _SUCCESS;
+@@ -3626,11 +3626,11 @@ PHY_ConfigRFWithTxPwrTrackParaFile(
+ 
+ 	if ((pHalData->rf_tx_pwr_track_len == 0) && (pHalData->rf_tx_pwr_track == NULL))
+ 	{
+-		rtw_merge_string(file_path, PATH_LENGTH_MAX, rtw_phy_file_path, pFileName);
++		rtw_merge_string(rtw_file_path, PATH_LENGTH_MAX, rtw_phy_file_path, pFileName);
+ 	
+-		if (rtw_is_file_readable(file_path) == _TRUE)
++		if (rtw_is_file_readable(rtw_file_path) == _TRUE)
+ 		{
+-			rlen = rtw_retrive_from_file(file_path, pHalData->para_file_buf, MAX_PARA_FILE_BUF_LEN);
++			rlen = rtw_retrive_from_file(rtw_file_path, pHalData->para_file_buf, MAX_PARA_FILE_BUF_LEN);
+ 			if (rlen > 0)
+ 			{
+ 				rtStatus = _SUCCESS;
+@@ -3995,11 +3995,11 @@ PHY_ConfigRFWithPowerLimitTableParaFile(
+ 
+ 	if ((pHalData->rf_tx_pwr_lmt_len == 0) && (pHalData->rf_tx_pwr_lmt == NULL))
+ 	{
+-		rtw_merge_string(file_path, PATH_LENGTH_MAX, rtw_phy_file_path, pFileName);
++		rtw_merge_string(rtw_file_path, PATH_LENGTH_MAX, rtw_phy_file_path, pFileName);
+ 	
+-		if (rtw_is_file_readable(file_path) == _TRUE)
++		if (rtw_is_file_readable(rtw_file_path) == _TRUE)
+ 		{
+-			rlen = rtw_retrive_from_file(file_path, pHalData->para_file_buf, MAX_PARA_FILE_BUF_LEN);
++			rlen = rtw_retrive_from_file(rtw_file_path, pHalData->para_file_buf, MAX_PARA_FILE_BUF_LEN);
+ 			if (rlen > 0)
+ 			{
+ 				rtStatus = _SUCCESS;
+diff --git a/include/ieee80211.h b/include/ieee80211.h
+index fc293c4..8493002 100644
+--- a/include/ieee80211.h
++++ b/include/ieee80211.h
+@@ -1525,7 +1525,7 @@ enum rtw_ieee80211_vht_actioncode{
+ 
+ /* Represent channel details, subset of ieee80211_channel */
+ struct rtw_ieee80211_channel {
+-	//enum ieee80211_band band;
++	//enum nl80211_band band;
+ 	//u16 center_freq;
+ 	u16 hw_value;
+ 	u32 flags;
+diff --git a/include/osdep_service_linux.h b/include/osdep_service_linux.h
+index b45c848..b54fec2 100644
+--- a/include/osdep_service_linux.h
++++ b/include/osdep_service_linux.h
+@@ -28,6 +28,7 @@
+ 	#include <linux/init.h>
+ 	#include <linux/slab.h>
+ 	#include <linux/module.h>
++	#include <linux/sched/signal.h>
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,5))
+ 	#include <linux/kref.h>
+ #endif
+diff --git a/include/rtw_debug.h b/include/rtw_debug.h
+index bf36357..2fd4153 100644
+--- a/include/rtw_debug.h
++++ b/include/rtw_debug.h
+@@ -227,7 +227,7 @@ extern void rtl871x_cedbg(const char *fmt, ...);
+ 		if (sel == RTW_DBGDUMP)\
+ 			_DBG_871X_LEVEL(_drv_always_, fmt, ##arg); \
+ 		else {\
+-			if(_seqdump(sel, fmt, ##arg)) /*rtw_warn_on(1)*/; \
++			_seqdump(sel, fmt, ##arg) /*rtw_warn_on(1)*/; \
+ 		} \
+ 	}while(0)
+ 
+@@ -237,7 +237,7 @@ extern void rtl871x_cedbg(const char *fmt, ...);
+ 		if (sel == RTW_DBGDUMP)\
+ 			DBG_871X_LEVEL(_drv_always_, fmt, ##arg); \
+ 		else {\
+-			if(_seqdump(sel, fmt, ##arg)) /*rtw_warn_on(1)*/; \
++			_seqdump(sel, fmt, ##arg) /*rtw_warn_on(1)*/; \
+ 		} \
+ 	}while(0)
+ 
+diff --git a/os_dep/linux/ioctl_cfg80211.c b/os_dep/linux/ioctl_cfg80211.c
+index f839ee3..b6e5e65 100644
+--- a/os_dep/linux/ioctl_cfg80211.c
++++ b/os_dep/linux/ioctl_cfg80211.c
+@@ -75,7 +75,7 @@ static const u32 rtw_cipher_suites[] = {
+ 	}
+ 
+ #define CHAN2G(_channel, _freq, _flags) {			\
+-	.band			= IEEE80211_BAND_2GHZ,		\
++	.band			= NL80211_BAND_2GHZ,		\
+ 	.center_freq		= (_freq),			\
+ 	.hw_value		= (_channel),			\
+ 	.flags			= (_flags),			\
+@@ -84,7 +84,7 @@ static const u32 rtw_cipher_suites[] = {
+ }
+ 
+ #define CHAN5G(_channel, _flags) {				\
+-	.band			= IEEE80211_BAND_5GHZ,		\
++	.band			= NL80211_BAND_5GHZ,		\
+ 	.center_freq		= 5000 + (5 * (_channel)),	\
+ 	.hw_value		= (_channel),			\
+ 	.flags			= (_flags),			\
+@@ -201,18 +201,18 @@ void rtw_5g_rates_init(struct ieee80211_rate *rates)
+ }
+ 
+ struct ieee80211_supported_band *rtw_spt_band_alloc(
+-	enum ieee80211_band band
++	enum nl80211_band band
+ 	)
+ {
+ 	struct ieee80211_supported_band *spt_band = NULL;
+ 	int n_channels, n_bitrates;
+ 
+-	if(band == IEEE80211_BAND_2GHZ)
++	if(band == NL80211_BAND_2GHZ)
+ 	{
+ 		n_channels = RTW_2G_CHANNELS_NUM;
+ 		n_bitrates = RTW_G_RATES_NUM;
+ 	}
+-	else if(band == IEEE80211_BAND_5GHZ)
++	else if(band == NL80211_BAND_5GHZ)
+ 	{
+ 		n_channels = RTW_5G_CHANNELS_NUM;
+ 		n_bitrates = RTW_A_RATES_NUM;
+@@ -236,12 +236,12 @@ struct ieee80211_supported_band *rtw_spt_band_alloc(
+ 	spt_band->n_channels = n_channels;
+ 	spt_band->n_bitrates = n_bitrates;
+ 
+-	if(band == IEEE80211_BAND_2GHZ)
++	if(band == NL80211_BAND_2GHZ)
+ 	{
+ 		rtw_2g_channels_init(spt_band->channels);
+ 		rtw_2g_rates_init(spt_band->bitrates);
+ 	}
+-	else if(band == IEEE80211_BAND_5GHZ)
++	else if(band == NL80211_BAND_5GHZ)
+ 	{
+ 		rtw_5g_channels_init(spt_band->channels);
+ 		rtw_5g_rates_init(spt_band->bitrates);
+@@ -261,13 +261,13 @@ void rtw_spt_band_free(struct ieee80211_supported_band *spt_band)
+ 	if(!spt_band)
+ 		return;
+ 	
+-	if(spt_band->band == IEEE80211_BAND_2GHZ)
++	if(spt_band->band == NL80211_BAND_2GHZ)
+ 	{
+ 		size = sizeof(struct ieee80211_supported_band)
+ 			+ sizeof(struct ieee80211_channel)*RTW_2G_CHANNELS_NUM
+ 			+ sizeof(struct ieee80211_rate)*RTW_G_RATES_NUM;
+ 	}
+-	else if(spt_band->band == IEEE80211_BAND_5GHZ)
++	else if(spt_band->band == NL80211_BAND_5GHZ)
+ 	{
+ 		size = sizeof(struct ieee80211_supported_band)
+ 			+ sizeof(struct ieee80211_channel)*RTW_5G_CHANNELS_NUM
+@@ -336,12 +336,12 @@ static int rtw_ieee80211_channel_to_frequency(int chan, int band)
+ 	/* see 802.11 17.3.8.3.2 and Annex J
+ 	* there are overlapping channel numbers in 5GHz and 2GHz bands */
+            
+-	if (band == IEEE80211_BAND_5GHZ) {
++	if (band == NL80211_BAND_5GHZ) {
+        	if (chan >= 182 && chan <= 196)
+ 			return 4000 + chan * 5;
+              else
+                     return 5000 + chan * 5;
+-       } else { /* IEEE80211_BAND_2GHZ */
++       } else { /* NL80211_BAND_2GHZ */
+ 		if (chan == 14)
+ 			return 2484;
+              else if (chan < 14)
+@@ -463,9 +463,9 @@ struct cfg80211_bss *rtw_cfg80211_inform_bss(_adapter *padapter, struct wlan_net
+ 					DBG_871X("%s, got sr, but ssid mismatch, to remove this bss\n", __func__);
+ 
+ 					if (pselect_network->Configuration.DSConfig <= RTW_CH_MAX_2G_CHANNEL)
+-						freq = rtw_ieee80211_channel_to_frequency(pselect_network->Configuration.DSConfig, IEEE80211_BAND_2GHZ);
++						freq = rtw_ieee80211_channel_to_frequency(pselect_network->Configuration.DSConfig, NL80211_BAND_2GHZ);
+ 					else
+-						freq = rtw_ieee80211_channel_to_frequency(pselect_network->Configuration.DSConfig, IEEE80211_BAND_5GHZ);
++						freq = rtw_ieee80211_channel_to_frequency(pselect_network->Configuration.DSConfig, NL80211_BAND_5GHZ);
+ 
+ 					notify_channel = ieee80211_get_channel(wiphy, freq);
+ 					pselect_bss = cfg80211_get_bss(wiphy, NULL/*notify_channel*/,
+@@ -497,9 +497,9 @@ struct cfg80211_bss *rtw_cfg80211_inform_bss(_adapter *padapter, struct wlan_net
+ 
+ 	channel = pnetwork->network.Configuration.DSConfig;
+ 	if (channel <= RTW_CH_MAX_2G_CHANNEL)
+-		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_2GHZ);
++		freq = rtw_ieee80211_channel_to_frequency(channel, NL80211_BAND_2GHZ);
+ 	else
+-		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_5GHZ);
++		freq = rtw_ieee80211_channel_to_frequency(channel, NL80211_BAND_5GHZ);
+ 	
+ 	notify_channel = ieee80211_get_channel(wiphy, freq);
+ 
+@@ -643,9 +643,9 @@ int rtw_cfg80211_check_bss(_adapter *padapter)
+ 		return _FALSE;
+ 
+ 	if (pnetwork->Configuration.DSConfig <= RTW_CH_MAX_2G_CHANNEL)
+-		freq = rtw_ieee80211_channel_to_frequency(pnetwork->Configuration.DSConfig, IEEE80211_BAND_2GHZ);
++		freq = rtw_ieee80211_channel_to_frequency(pnetwork->Configuration.DSConfig, NL80211_BAND_2GHZ);
+ 	else
+-		freq = rtw_ieee80211_channel_to_frequency(pnetwork->Configuration.DSConfig, IEEE80211_BAND_5GHZ);
++		freq = rtw_ieee80211_channel_to_frequency(pnetwork->Configuration.DSConfig, NL80211_BAND_5GHZ);
+ 
+ 	notify_channel = ieee80211_get_channel(padapter->rtw_wdev->wiphy, freq);
+ 	bss = cfg80211_get_bss(padapter->rtw_wdev->wiphy, notify_channel,
+@@ -678,9 +678,9 @@ void rtw_cfg80211_ibss_indicate_connect(_adapter *padapter)
+ 
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 15, 0))	
+ 	if (cur_network->network.Configuration.DSConfig <= RTW_CH_MAX_2G_CHANNEL)
+-		freq = rtw_ieee80211_channel_to_frequency(cur_network->network.Configuration.DSConfig, IEEE80211_BAND_2GHZ);
++		freq = rtw_ieee80211_channel_to_frequency(cur_network->network.Configuration.DSConfig, NL80211_BAND_2GHZ);
+ 	else
+-		freq = rtw_ieee80211_channel_to_frequency(cur_network->network.Configuration.DSConfig, IEEE80211_BAND_5GHZ);
++		freq = rtw_ieee80211_channel_to_frequency(cur_network->network.Configuration.DSConfig, NL80211_BAND_5GHZ);
+ 	
+ 	if (0)
+ 		DBG_871X("chan: %d, freq: %d\n", cur_network->network.Configuration.DSConfig, freq);
+@@ -818,9 +818,9 @@ check_bss:
+ 		u16 channel = cur_network->network.Configuration.DSConfig;
+ 
+ 		if (channel <= RTW_CH_MAX_2G_CHANNEL)
+-			freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_2GHZ);
++			freq = rtw_ieee80211_channel_to_frequency(channel, NL80211_BAND_2GHZ);
+ 		else
+-			freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_5GHZ);
++			freq = rtw_ieee80211_channel_to_frequency(channel, NL80211_BAND_5GHZ);
+ 
+ 		notify_channel = ieee80211_get_channel(wiphy, freq);
+ 		#endif
+@@ -904,7 +904,7 @@ void rtw_cfg80211_indicate_disconnect(_adapter *padapter)
+ 		#else
+ 
+ 		if(check_fwstate(&padapter->mlmepriv, _FW_LINKED))
+-			cfg80211_disconnected(padapter->pnetdev, 0, NULL, 0, GFP_ATOMIC);
++			cfg80211_disconnected(padapter->pnetdev, 0, NULL, 0, 0, GFP_ATOMIC);
+ 		else
+ 			cfg80211_connect_result(padapter->pnetdev, NULL, NULL, 0, NULL, 0,
+ 				WLAN_STATUS_UNSPECIFIED_FAILURE, GFP_ATOMIC/*GFP_KERNEL*/);
+@@ -1763,16 +1763,16 @@ static int cfg80211_rtw_get_station(struct wiphy *wiphy, struct net_device *ndev
+ 			goto exit;
+ 		}
+ 
+-		sinfo->filled |= STATION_INFO_SIGNAL;
++		sinfo->filled |= NL80211_STA_INFO_SIGNAL;
+ 		sinfo->signal = translate_percentage_to_dbm(padapter->recvpriv.signal_strength);
+ 
+-		sinfo->filled |= STATION_INFO_TX_BITRATE;
++		sinfo->filled |= NL80211_STA_INFO_TX_BITRATE;
+ 		sinfo->txrate.legacy = rtw_get_cur_max_rate(padapter);
+ 
+-		sinfo->filled |= STATION_INFO_RX_PACKETS;
++		sinfo->filled |= NL80211_STA_INFO_RX_PACKETS;
+ 		sinfo->rx_packets = sta_rx_data_pkts(psta);
+ 
+-		sinfo->filled |= STATION_INFO_TX_PACKETS;
++		sinfo->filled |= NL80211_STA_INFO_TX_PACKETS;
+ 		sinfo->tx_packets = psta->sta_stats.tx_pkts;
+ 
+ 	}
+@@ -1950,6 +1950,7 @@ void rtw_cfg80211_indicate_scan_done(_adapter *adapter, bool aborted)
+ {
+ 	struct rtw_wdev_priv *pwdev_priv = adapter_wdev_data(adapter);
+ 	_irqL	irqL;
++	struct cfg80211_scan_info done_sinfo = { 0, 0, aborted };
+ 
+ 	_enter_critical_bh(&pwdev_priv->scan_req_lock, &irqL);
+ 	if (pwdev_priv->scan_request != NULL) {
+@@ -1964,7 +1965,7 @@ void rtw_cfg80211_indicate_scan_done(_adapter *adapter, bool aborted)
+ 		}
+ 		else
+ 		{
+-			cfg80211_scan_done(pwdev_priv->scan_request, aborted);
++			cfg80211_scan_done(pwdev_priv->scan_request, &done_sinfo);
+ 		}
+ 
+ 		pwdev_priv->scan_request = NULL;
+@@ -3497,7 +3498,6 @@ void rtw_cfg80211_indicate_sta_assoc(_adapter *padapter, u8 *pmgmt_frame, uint f
+ 			ie_offset = _REASOCREQ_IE_OFFSET_;
+ 	
+ 		sinfo.filled = 0;
+-		sinfo.filled = STATION_INFO_ASSOC_REQ_IES;
+ 		sinfo.assoc_req_ies = pmgmt_frame + WLAN_HDR_A3_LEN + ie_offset;
+ 		sinfo.assoc_req_ies_len = frame_len - WLAN_HDR_A3_LEN - ie_offset;
+ 		cfg80211_new_sta(ndev, GetAddr2Ptr(pmgmt_frame), &sinfo, GFP_ATOMIC);
+@@ -3505,9 +3505,9 @@ void rtw_cfg80211_indicate_sta_assoc(_adapter *padapter, u8 *pmgmt_frame, uint f
+ #else /* defined(RTW_USE_CFG80211_STA_EVENT) */
+ 	channel = pmlmeext->cur_channel;
+ 	if (channel <= RTW_CH_MAX_2G_CHANNEL)
+-		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_2GHZ);
++		freq = rtw_ieee80211_channel_to_frequency(channel, NL80211_BAND_2GHZ);
+ 	else
+-		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_5GHZ);
++		freq = rtw_ieee80211_channel_to_frequency(channel, NL80211_BAND_5GHZ);
+ 
+ 	#ifdef COMPAT_KERNEL_RELEASE
+ 	rtw_cfg80211_rx_mgmt(padapter, freq, 0, pmgmt_frame, frame_len, GFP_ATOMIC);
+@@ -3550,9 +3550,9 @@ void rtw_cfg80211_indicate_sta_disassoc(_adapter *padapter, unsigned char *da, u
+ #else /* defined(RTW_USE_CFG80211_STA_EVENT) */
+ 	channel = pmlmeext->cur_channel;
+ 	if (channel <= RTW_CH_MAX_2G_CHANNEL)
+-		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_2GHZ);
++		freq = rtw_ieee80211_channel_to_frequency(channel, NL80211_BAND_2GHZ);
+ 	else
+-		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_5GHZ);
++		freq = rtw_ieee80211_channel_to_frequency(channel, NL80211_BAND_5GHZ);
+ 
+ 	pmgmt_frame = mgmt_buf;	
+ 	pwlanhdr = (struct rtw_ieee80211_hdr *)pmgmt_frame;
+@@ -3887,6 +3887,7 @@ static int
+ 		struct wiphy *wiphy,
+ 	#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,7,0))
+ 		const char *name,
++		unsigned char name_assign_type,
+ 	#else
+ 		char *name,
+ 	#endif
+@@ -4186,12 +4187,13 @@ static int	cfg80211_rtw_add_station(struct wiphy *wiphy, struct net_device *ndev
+ 
+ static int	cfg80211_rtw_del_station(struct wiphy *wiphy, struct net_device *ndev,
+ #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,16,0))
+-	u8 *mac
++	u8 mac
+ #else
+-	const u8 *mac
++	struct station_del_parameters *params
+ #endif
+ )
+ {
++	const u8 *mac = params == NULL ? NULL : params->mac;
+ 	int ret=0;	
+ 	_irqL irqL;
+ 	_list	*phead, *plist;
+@@ -4407,9 +4409,9 @@ void rtw_cfg80211_rx_action_p2p(_adapter *padapter, u8 *pmgmt_frame, uint frame_
+ 
+ indicate:
+ 	if (channel <= RTW_CH_MAX_2G_CHANNEL)
+-		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_2GHZ);
++		freq = rtw_ieee80211_channel_to_frequency(channel, NL80211_BAND_2GHZ);
+ 	else
+-		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_5GHZ);
++		freq = rtw_ieee80211_channel_to_frequency(channel, NL80211_BAND_5GHZ);
+ 
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) || defined(COMPAT_KERNEL_RELEASE)
+ 	rtw_cfg80211_rx_mgmt(padapter, freq, 0, pmgmt_frame, frame_len, GFP_ATOMIC);
+@@ -4447,9 +4449,9 @@ void rtw_cfg80211_rx_p2p_action_public(_adapter *padapter, u8 *pmgmt_frame, uint
+ 
+ indicate:
+ 	if (channel <= RTW_CH_MAX_2G_CHANNEL)
+-		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_2GHZ);
++		freq = rtw_ieee80211_channel_to_frequency(channel, NL80211_BAND_2GHZ);
+ 	else
+-		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_5GHZ);
++		freq = rtw_ieee80211_channel_to_frequency(channel, NL80211_BAND_5GHZ);
+ 
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) || defined(COMPAT_KERNEL_RELEASE)
+ 	rtw_cfg80211_rx_mgmt(padapter, freq, 0, pmgmt_frame, frame_len, GFP_ATOMIC);
+@@ -4480,9 +4482,9 @@ void rtw_cfg80211_rx_action(_adapter *adapter, u8 *frame, uint frame_len, const
+ 	}
+ 
+ 	if (channel <= RTW_CH_MAX_2G_CHANNEL)
+-		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_2GHZ);
++		freq = rtw_ieee80211_channel_to_frequency(channel, NL80211_BAND_2GHZ);
+ 	else
+-		freq = rtw_ieee80211_channel_to_frequency(channel, IEEE80211_BAND_5GHZ);
++		freq = rtw_ieee80211_channel_to_frequency(channel, NL80211_BAND_5GHZ);
+ 
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,37)) || defined(COMPAT_KERNEL_RELEASE)
+ 	rtw_cfg80211_rx_mgmt(adapter, freq, 0, frame, frame_len, GFP_ATOMIC);
+@@ -5868,7 +5870,7 @@ int rtw_cfg80211_set_mgnt_wpsp2pie(struct net_device *net, char *buf, int len,
+ 	
+ }
+ 
+-static void rtw_cfg80211_init_ht_capab(struct ieee80211_sta_ht_cap *ht_cap, enum ieee80211_band band, u8 rf_type)
++static void rtw_cfg80211_init_ht_capab(struct ieee80211_sta_ht_cap *ht_cap, enum nl80211_band band, u8 rf_type)
+ {
+ 
+ #define MAX_BIT_RATE_40MHZ_MCS15 	300	/* Mbps */
+@@ -5892,7 +5894,7 @@ static void rtw_cfg80211_init_ht_capab(struct ieee80211_sta_ht_cap *ht_cap, enum
+ 	ht_cap->mcs.tx_params = IEEE80211_HT_MCS_TX_DEFINED;
+ 
+ 	/*
+-	 *hw->wiphy->bands[IEEE80211_BAND_2GHZ]
++	 *hw->wiphy->bands[NL80211_BAND_2GHZ]
+ 	 *base on ant_num
+ 	 *rx_mask: RX mask
+ 	 *if rx_ant =1 rx_mask[0]=0xff;==>MCS0-MCS7
+@@ -5937,16 +5939,16 @@ void rtw_cfg80211_init_wiphy(_adapter *padapter)
+ 
+ 	if (padapter->registrypriv.wireless_mode & WIRELESS_11G)
+ 	{
+-		bands = wiphy->bands[IEEE80211_BAND_2GHZ];
++		bands = wiphy->bands[NL80211_BAND_2GHZ];
+ 		if(bands)
+-			rtw_cfg80211_init_ht_capab(&bands->ht_cap, IEEE80211_BAND_2GHZ, rf_type);
++			rtw_cfg80211_init_ht_capab(&bands->ht_cap, NL80211_BAND_2GHZ, rf_type);
+ 	}
+ 
+ 	if (padapter->registrypriv.wireless_mode & WIRELESS_11A)
+ 	{
+-		bands = wiphy->bands[IEEE80211_BAND_5GHZ];
++		bands = wiphy->bands[NL80211_BAND_5GHZ];
+ 		if(bands)
+-			rtw_cfg80211_init_ht_capab(&bands->ht_cap, IEEE80211_BAND_5GHZ, rf_type);
++			rtw_cfg80211_init_ht_capab(&bands->ht_cap, NL80211_BAND_5GHZ, rf_type);
+ 	}
+ 
+ 	/* init regulary domain */
+@@ -6028,10 +6030,10 @@ static void rtw_cfg80211_preinit_wiphy(_adapter *padapter, struct wiphy *wiphy)
+ 	wiphy->n_cipher_suites = ARRAY_SIZE(rtw_cipher_suites);
+ 
+ 	/* if (padapter->registrypriv.wireless_mode & WIRELESS_11G) */
+-		wiphy->bands[IEEE80211_BAND_2GHZ] = rtw_spt_band_alloc(IEEE80211_BAND_2GHZ);
+-#ifdef CONFIG_IEEE80211_BAND_5GHZ
++		wiphy->bands[NL80211_BAND_2GHZ] = rtw_spt_band_alloc(NL80211_BAND_2GHZ);
++#ifdef CONFIG_NL80211_BAND_5GHZ
+ 	/* if (padapter->registrypriv.wireless_mode & WIRELESS_11A) */
+-		wiphy->bands[IEEE80211_BAND_5GHZ] = rtw_spt_band_alloc(IEEE80211_BAND_5GHZ);
++		wiphy->bands[NL80211_BAND_5GHZ] = rtw_spt_band_alloc(NL80211_BAND_5GHZ);
+ #endif
+ 	
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38) && LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0))
+@@ -6219,8 +6221,8 @@ void rtw_wdev_free(struct wireless_dev *wdev)
+ 	if (!wdev)
+ 		return;
+ 
+-	rtw_spt_band_free(wdev->wiphy->bands[IEEE80211_BAND_2GHZ]);
+-	rtw_spt_band_free(wdev->wiphy->bands[IEEE80211_BAND_5GHZ]);
++	rtw_spt_band_free(wdev->wiphy->bands[NL80211_BAND_2GHZ]);
++	rtw_spt_band_free(wdev->wiphy->bands[NL80211_BAND_5GHZ]);
+ 	
+ 	wiphy_free(wdev->wiphy);
+ 
+diff --git a/os_dep/linux/rtw_android.c b/os_dep/linux/rtw_android.c
+index a807602..d2afeb1 100644
+--- a/os_dep/linux/rtw_android.c
++++ b/os_dep/linux/rtw_android.c
+@@ -286,7 +286,7 @@ int rtw_android_cmdstr_to_num(char *cmdstr)
+ {
+ 	int cmd_num;
+ 	for(cmd_num=0 ; cmd_num<ANDROID_WIFI_CMD_MAX; cmd_num++)
+-		if(0 == strnicmp(cmdstr , android_wifi_cmd_str[cmd_num], strlen(android_wifi_cmd_str[cmd_num])) )
++		if(0 == strncasecmp(cmdstr , android_wifi_cmd_str[cmd_num], strlen(android_wifi_cmd_str[cmd_num])) )
+ 			break;
+ 
+ 	return cmd_num;
+@@ -508,7 +508,7 @@ int rtw_android_priv_cmd(struct net_device *net, struct ifreq *ifr, int cmd)
+ 		goto exit;
+ 	}
+ #ifdef CONFIG_COMPAT
+-	if (is_compat_task()) {
++	if (in_compat_syscall()) {
+ 		/* User space is 32-bit, use compat ioctl */
+ 		compat_android_wifi_priv_cmd compat_priv_cmd;
+ 
+diff --git a/os_dep/linux/wifi_regd.c b/os_dep/linux/wifi_regd.c
+index 2831ff1..6222670 100644
+--- a/os_dep/linux/wifi_regd.c
++++ b/os_dep/linux/wifi_regd.c
+@@ -143,7 +143,7 @@ static bool _rtw_is_radar_freq(u16 center_freq)
+ static void _rtw_reg_apply_beaconing_flags(struct wiphy *wiphy,
+ 					   enum nl80211_reg_initiator initiator)
+ {
+-	enum ieee80211_band band;
++	enum nl80211_band band;
+ 	struct ieee80211_supported_band *sband;
+ 	const struct ieee80211_reg_rule *reg_rule;
+ 	struct ieee80211_channel *ch;
+@@ -151,7 +151,7 @@ static void _rtw_reg_apply_beaconing_flags(struct wiphy *wiphy,
+ 	u32 bandwidth = 0;
+ 	int r;
+ 
+-	for (band = 0; band < IEEE80211_NUM_BANDS; band++) {
++	for (band = 0; band < NUM_NL80211_BANDS; band++) {
+ 
+ 		if (!wiphy->bands[band])
+ 			continue;
+@@ -205,9 +205,9 @@ static void _rtw_reg_apply_active_scan_flags(struct wiphy *wiphy,
+ 	u32 bandwidth = 0;
+ 	int r;
+ 
+-	if (!wiphy->bands[IEEE80211_BAND_2GHZ])
++	if (!wiphy->bands[NL80211_BAND_2GHZ])
+ 		return;
+-	sband = wiphy->bands[IEEE80211_BAND_2GHZ];
++	sband = wiphy->bands[NL80211_BAND_2GHZ];
+ 
+ 	/*
+ 	 * If no country IE has been received always enable active scan
+@@ -258,10 +258,10 @@ static void _rtw_reg_apply_radar_flags(struct wiphy *wiphy)
+ 	struct ieee80211_channel *ch;
+ 	unsigned int i;
+ 
+-	if (!wiphy->bands[IEEE80211_BAND_5GHZ])
++	if (!wiphy->bands[NL80211_BAND_5GHZ])
+ 		return;
+ 
+-	sband = wiphy->bands[IEEE80211_BAND_5GHZ];
++	sband = wiphy->bands[NL80211_BAND_5GHZ];
+ 
+ 	for (i = 0; i < sband->n_channels; i++) {
+ 		ch = &sband->channels[i];
+@@ -303,12 +303,12 @@ static int rtw_ieee80211_channel_to_frequency(int chan, int band)
+ 	/* see 802.11 17.3.8.3.2 and Annex J
+ 	 * there are overlapping channel numbers in 5GHz and 2GHz bands */
+ 
+-	if (band == IEEE80211_BAND_5GHZ) {
++	if (band == NL80211_BAND_5GHZ) {
+ 		if (chan >= 182 && chan <= 196)
+ 			return 4000 + chan * 5;
+ 		else
+ 			return 5000 + chan * 5;
+-	} else {		/* IEEE80211_BAND_2GHZ */
++	} else {		/* NL80211_BAND_2GHZ */
+ 		if (chan == 14)
+ 			return 2484;
+ 		else if (chan < 14)
+@@ -334,7 +334,7 @@ static void _rtw_reg_apply_flags(struct wiphy *wiphy)
+ 	u32 freq;
+ 
+ 	// all channels disable
+-	for (i = 0; i < IEEE80211_NUM_BANDS; i++) {
++	for (i = 0; i < NUM_NL80211_BANDS; i++) {
+ 		sband = wiphy->bands[i];
+ 
+ 		if (sband) {
+@@ -353,11 +353,11 @@ static void _rtw_reg_apply_flags(struct wiphy *wiphy)
+ 		if (channel <= 14)
+ 			freq =
+ 			    rtw_ieee80211_channel_to_frequency(channel,
+-							       IEEE80211_BAND_2GHZ);
++							       NL80211_BAND_2GHZ);
+ 		else
+ 			freq =
+ 			    rtw_ieee80211_channel_to_frequency(channel,
+-							       IEEE80211_BAND_5GHZ);
++							       NL80211_BAND_5GHZ);
+ 
+ 		ch = ieee80211_get_channel(wiphy, freq);
+ 		if (ch) {
+@@ -387,7 +387,7 @@ static void _rtw_reg_apply_flags(struct wiphy *wiphy)
+ 	u16 channel;
+ 	u32 freq;
+ 
+-	for (i = 0; i < IEEE80211_NUM_BANDS; i++) {
++	for (i = 0; i < NUM_NL80211_BANDS; i++) {
+ 		sband = wiphy->bands[i];
+ 
+ 		if (sband)
+@@ -404,11 +404,11 @@ static void _rtw_reg_apply_flags(struct wiphy *wiphy)
+ 		if (channel <= 14)
+ 			freq =
+ 			    rtw_ieee80211_channel_to_frequency(channel,
+-							       IEEE80211_BAND_2GHZ);
++							       NL80211_BAND_2GHZ);
+ 		else
+ 			freq =
+ 			    rtw_ieee80211_channel_to_frequency(channel,
+-							       IEEE80211_BAND_5GHZ);
++							       NL80211_BAND_5GHZ);
+ 
+ 		ch = ieee80211_get_channel(wiphy, freq);
+ 		if (ch) {
+
