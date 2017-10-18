@@ -1,0 +1,58 @@
+From 555b3104662883c5c8f7378c5e94dd7f30f2892b Mon Sep 17 00:00:00 2001
+From: masterzorag <masterzorag@gmail.com>
+Date: Fri, 11 Aug 2017 23:09:20 +0200
+Subject: [PATCH] Fix for cfg80211_roamed() API change
+
+As seen here:
+- https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/diff/include/net/cfg80211.h?h=v4.12.6&id=29ce6ecbb83c9185d76e3a7c340c9702d2a54961
+- https://patchwork.kernel.org/patch/9714419/
+---
+ os_dep/linux/ioctl_cfg80211.c | 25 +++++++++++++++++++++++--
+ 1 file changed, 23 insertions(+), 2 deletions(-)
+
+diff --git a/os_dep/linux/ioctl_cfg80211.c b/os_dep/linux/ioctl_cfg80211.c
+index 7dd0198..2b92c93 100644
+--- a/os_dep/linux/ioctl_cfg80211.c
++++ b/os_dep/linux/ioctl_cfg80211.c
+@@ -815,7 +815,10 @@ check_bss:
+ 		struct wiphy *wiphy = pwdev->wiphy;
+ 		struct ieee80211_channel *notify_channel;
+ 		u32 freq;
+-		u16 channel = cur_network->network.Configuration.DSConfig;
++		u16 channel = cur_network->network.Configuration.DSConfig;
++		#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0)
++			struct cfg80211_roam_info roam_info = {};
++		#endif
+ 
+                if (channel <= RTW_CH_MAX_2G_CHANNEL)
+                        freq = rtw_ieee80211_channel_to_frequency(channel, NL80211_BAND_5GHZ);
+@@ -825,7 +828,20 @@ check_bss:
+                notify_channel = ieee80211_get_channel(wiphy, freq);
+                #endif
+
+-		DBG_871X(FUNC_ADPT_FMT" call cfg80211_roamed\n", FUNC_ADPT_ARG(padapter));
++		DBG_871X(FUNC_ADPT_FMT" call cfg80211_roamed\n", FUNC_ADPT_ARG(padapter));
++		#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0)
++		{
++			struct cfg80211_roam_info roam_info = {
++				.channel = notify_channel,
++				.bssid = cur_network->network.MacAddress,
++				.req_ie = pmlmepriv->assoc_req+sizeof(struct rtw_ieee80211_hdr_3addr)+2,
++				.req_ie_len = pmlmepriv->assoc_req_len-sizeof(struct rtw_ieee80211_hdr_3addr)-2,
++				.resp_ie = pmlmepriv->assoc_rsp+sizeof(struct rtw_ieee80211_hdr_3addr)+6,
++				.resp_ie_len = pmlmepriv->assoc_rsp_len-sizeof(struct rtw_ieee80211_hdr_3addr)-6,
++			};
++			cfg80211_roamed(padapter->pnetdev, &roam_info, GFP_ATOMIC);
++		}
++		#else
+ 		cfg80211_roamed(padapter->pnetdev
+ 			#if LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 39) || defined(COMPAT_KERNEL_RELEASE)
+ 			, notify_channel
+@@ -836,6 +852,7 @@ check_bss:
+ 			, pmlmepriv->assoc_rsp+sizeof(struct rtw_ieee80211_hdr_3addr)+6
+ 			, pmlmepriv->assoc_rsp_len-sizeof(struct rtw_ieee80211_hdr_3addr)-6
+ 			, GFP_ATOMIC);
++		#endif
+ 	}
+ 	else
+ 	{

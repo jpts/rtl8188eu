@@ -1,0 +1,71 @@
+From 555b3104662883c5c8f7378c5e94dd7f30f2892b Mon Sep 17 00:00:00 2001
+From: masterzorag <masterzorag@gmail.com>
+Date: Fri, 11 Aug 2017 23:09:20 +0200
+Subject: [PATCH] Fix for cfg80211_roamed() API change
+
+As seen here:
+- https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/diff/include/net/cfg80211.h?h=v4.12.6&id=29ce6ecbb83c9185d76e3a7c340c9702d2a54961
+- https://patchwork.kernel.org/patch/9714419/
+---
+ os_dep/linux/ioctl_cfg80211.c | 25 +++++++++++++++++++++++--
+ 1 file changed, 23 insertions(+), 2 deletions(-)
+
+diff --git a/os_dep/linux/ioctl_cfg80211.c b/os_dep/linux/ioctl_cfg80211.c
+index 7dd0198..2b92c93 100644
+--- a/os_dep/linux/ioctl_cfg80211.c
++++ b/os_dep/linux/ioctl_cfg80211.c
+@@ -803,13 +803,29 @@ check_bss:
+ 		struct wiphy *wiphy = pwdev->wiphy;
+ 		struct ieee80211_channel *notify_channel;
+ 		u32 freq;
+-		u16 channel = cur_network->network.Configuration.DSConfig;
++		u16 channel = cur_network->network.Configuration.DSConfig;
++		#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0)
++		struct cfg80211_roam_info roam_info = {};
++		#endif
+ 
+ 		freq = rtw_ch2freq(channel);
+ 		notify_channel = ieee80211_get_channel(wiphy, freq);
+ 		#endif
+ 
+-		DBG_871X(FUNC_ADPT_FMT" call cfg80211_roamed\n", FUNC_ADPT_ARG(padapter));
++		DBG_871X(FUNC_ADPT_FMT" call cfg80211_roamed\n", FUNC_ADPT_ARG(padapter));
++		#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 12, 0)
++		{
++			struct cfg80211_roam_info roam_info = {
++				.channel = notify_channel,
++				.bssid = cur_network->network.MacAddress,
++				.req_ie = pmlmepriv->assoc_req+sizeof(struct rtw_ieee80211_hdr_3addr)+2,
++				.req_ie_len = pmlmepriv->assoc_req_len-sizeof(struct rtw_ieee80211_hdr_3addr)-2,
++				.resp_ie = pmlmepriv->assoc_rsp+sizeof(struct rtw_ieee80211_hdr_3addr)+6,
++				.resp_ie_len = pmlmepriv->assoc_rsp_len-sizeof(struct rtw_ieee80211_hdr_3addr)-6,
++			};
++			cfg80211_roamed(padapter->pnetdev, &roam_info, GFP_ATOMIC);
++		}
++		#else
+ 		cfg80211_roamed(padapter->pnetdev
+ 			#if LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 39) || defined(COMPAT_KERNEL_RELEASE)
+ 			, notify_channel
+@@ -820,6 +836,7 @@ check_bss:
+ 			, pmlmepriv->assoc_rsp+sizeof(struct rtw_ieee80211_hdr_3addr)+6
+ 			, pmlmepriv->assoc_rsp_len-sizeof(struct rtw_ieee80211_hdr_3addr)-6
+ 			, GFP_ATOMIC);
++		#endif
+ 	}
+ 	else
+ 	{
+@@ -6537,7 +6554,11 @@ static void rtw_cfg80211_preinit_wiphy(_adapter *adapter, struct wiphy *wiphy)
+ #endif
+ 
+ #if defined(CONFIG_PM) && (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 0, 0))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4,12,0))
++	wiphy->max_sched_scan_reqs = 1;
++#else
+ 	wiphy->flags |= WIPHY_FLAG_SUPPORTS_SCHED_SCAN;
++#endif
+ #ifdef CONFIG_PNO_SUPPORT
+ 	wiphy->max_sched_scan_ssids = MAX_PNO_LIST_COUNT;
+ #endif
+-- 
+2.13.6
+
